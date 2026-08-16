@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import QRCodeDisplay from "@/components/QRCode";
 
 type Props = {
@@ -10,6 +10,8 @@ type Props = {
 
 export default async function BusinessPage({ params }: Props) {
   const { slug } = await params;
+
+  const supabase = await createClient();
 
   const { data: business, error } = await supabase
     .from("businesses")
