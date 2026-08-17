@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import QRCodeDisplay from "@/components/QRCode";
+import ActionIcon from "@/components/ActionIcon";
 
 type Props = {
   params: Promise<{
@@ -56,35 +57,25 @@ export default async function BusinessPage({ params }: Props) {
         </div>
 
         <div className="mt-8 space-y-3">
-          {business.phone && (
-            <a
-              href={`tel:${business.phone}`}
-              className="block rounded-xl border p-4 font-medium hover:bg-gray-50"
-            >
-              Call
-            </a>
-          )}
-
-          {business.whatsapp && (
-            <a
-              href={`https://wa.me/${business.whatsapp.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-xl border p-4 font-medium hover:bg-gray-50"
-            >
-              WhatsApp
-            </a>
-          )}
-
           {links?.map((link) => (
             <a
               key={link.id}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-xl border p-4 font-medium hover:bg-gray-50"
+              className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-4 text-left font-medium shadow-sm transition hover:bg-gray-50"
             >
-              {link.title}
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                <ActionIcon type={link.type} />
+              </span>
+
+              <span className="flex-1">
+                {link.title}
+              </span>
+
+              <span className="text-gray-400">
+                →
+              </span>
             </a>
           ))}
         </div>
