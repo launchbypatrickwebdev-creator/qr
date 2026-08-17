@@ -27,7 +27,7 @@ export default async function BusinessPage({ params }: Props) {
     .from("links")
     .select("*")
     .eq("business_id", business.id)
-    .eq("is_active", true)
+    .eq("active", true)
     .order("position", { ascending: true });
 
   return (
