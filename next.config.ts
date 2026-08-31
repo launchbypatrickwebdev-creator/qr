@@ -1,8 +1,34 @@
 import type { NextConfig } from "next";
 
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+const supabaseHostname = supabaseUrl
+  ? new URL(supabaseUrl).hostname
+  : null;
+
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+
+      ...(supabaseHostname
+        ? [
+            {
+              protocol: "https" as const,
+              hostname: supabaseHostname,
+              pathname:
+                "/storage/v1/object/public/business-logos/**",
+            },
+          ]
+        : []),
+    ],
+  },
 };
 
 export default nextConfig;

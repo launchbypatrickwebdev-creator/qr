@@ -1,13 +1,13 @@
 import {
+  BriefcaseBusiness,
   CalendarCheck,
+  ExternalLink,
   Globe,
   Mail,
   MapPin,
   Menu,
   Phone,
   ShoppingBag,
-  ExternalLink,
-  BriefcaseBusiness,
 } from "lucide-react";
 
 import {
@@ -23,39 +23,71 @@ type Props = {
   type: string;
 };
 
-export default function ActionIcon({ type }: Props) {
+export default function ActionIcon({
+  type,
+}: Props) {
   const className = "h-5 w-5";
 
   switch (type) {
     case "whatsapp":
-      return <FaWhatsapp className={className} />;
+      return (
+        <FaWhatsapp className={className} />
+      );
 
     case "instagram":
-      return <FaInstagram className={className} />;
+      return (
+        <FaInstagram className={className} />
+      );
 
     case "facebook":
-      return <FaFacebook className={className} />;
+      return (
+        <FaFacebook className={className} />
+      );
 
     case "tiktok":
       return <FaTiktok className={className} />;
 
     case "youtube":
-      return <FaYoutube className={className} />;
+      return (
+        <FaYoutube className={className} />
+      );
 
     case "linkedin":
-      return <FaLinkedin className={className} />;
+      return (
+        <FaLinkedin className={className} />
+      );
 
     case "call":
-      return <Phone className={className} strokeWidth={2} />;
+      return (
+        <Phone
+          className={className}
+          strokeWidth={2}
+        />
+      );
 
     case "email":
-      return <Mail className={className} strokeWidth={2} />;
+      return (
+        <Mail
+          className={className}
+          strokeWidth={2}
+        />
+      );
 
     case "location":
-      return <MapPin className={className} strokeWidth={2} />;
+      return (
+        <MapPin
+          className={className}
+          strokeWidth={2}
+        />
+      );
 
     case "website":
-      return <Globe className={className} strokeWidth={2} />;
+      return (
+        <Globe
+          className={className}
+          strokeWidth={2}
+        />
+      );
 
     case "booking":
       return (
@@ -66,7 +98,12 @@ export default function ActionIcon({ type }: Props) {
       );
 
     case "menu":
-      return <Menu className={className} strokeWidth={2} />;
+      return (
+        <Menu
+          className={className}
+          strokeWidth={2}
+        />
+      );
 
     case "shop":
       return (

@@ -1,6 +1,8 @@
 import { notFound, redirect } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/server";
 import EditBusinessForm from "@/components/EditBusinessForm";
+import BusinessNavigation from "@/components/BusinessNavigation";
 
 type Props = {
   params: Promise<{
@@ -8,7 +10,9 @@ type Props = {
   }>;
 };
 
-export default async function EditBusinessPage({ params }: Props) {
+export default async function BusinessProfilePage({
+  params,
+}: Props) {
   const { slug } = await params;
 
   const supabase = await createClient();
@@ -23,7 +27,20 @@ export default async function EditBusinessPage({ params }: Props) {
 
   const { data: business, error } = await supabase
     .from("businesses")
-    .select("*")
+    .select(`
+      id,
+      name,
+      slug,
+      description,
+      phone,
+      whatsapp,
+      email,
+      location,
+      logo_url,
+      theme_color,
+      background_color,
+      button_style
+    `)
     .eq("slug", slug)
     .eq("owner_id", user.id)
     .single();
@@ -32,21 +49,46 @@ export default async function EditBusinessPage({ params }: Props) {
     notFound();
   }
 
+  const { data: links } = await supabase
+    .from("links")
+    .select(`
+      id,
+      title,
+      type,
+      position,
+      active
+    `)
+    .eq("business_id", business.id)
+    .order("position", {
+      ascending: true,
+    });
+
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-10">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8">
-          <p className="text-sm text-gray-500">
-            Business Profile
-          </p>
+    <main className="min-h-screen bg-[#F7F7F5]">
+      <BusinessNavigation
+        slug={business.slug}
+        businessName={business.name}
+      />
 
-          <h1 className="mt-1 text-3xl font-bold text-gray-900">
-            Edit {business.name}
-          </h1>
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="max-w-3xl">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-950">
+              Profile
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Update the information and visual identity
+              customers see when they open your profile.
+            </p>
+          </div>
+
+          <EditBusinessForm
+            business={business}
+            links={links ?? []}
+          />
         </div>
-
-        <EditBusinessForm business={business} />
-      </div>
+      </section>
     </main>
   );
 }

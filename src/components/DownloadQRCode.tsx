@@ -1,7 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import QRCode from "qrcode";
+
+import {
+  Check,
+  Copy,
+  Download,
+  ExternalLink,
+  Loader2,
+} from "lucide-react";
 
 type Props = {
   slug: string;
@@ -12,94 +25,262 @@ export default function DownloadQRCode({
   slug,
   businessName,
 }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [downloadUrl, setDownloadUrl] = useState("");
-  const [copied, setCopied] = useState(false);
+  const canvasRef =
+    useRef<HTMLCanvasElement>(null);
+
+  const [
+    profileUrl,
+    setProfileUrl,
+  ] = useState("");
+
+  const [copied, setCopied] =
+    useState(false);
+
+  const [
+    isGenerating,
+    setIsGenerating,
+  ] = useState(true);
+
+  const [
+    isDownloading,
+    setIsDownloading,
+  ] = useState(false);
+
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
-    const generateQRCode = async () => {
-      const profileUrl = `${window.location.origin}/q/${slug}`;
-
+    async function generateQRCode() {
       if (!canvasRef.current) return;
 
-      await QRCode.toCanvas(canvasRef.current, profileUrl, {
-        width: 320,
-        margin: 4,
-        errorCorrectionLevel: "H",
-      });
+      try {
+        setIsGenerating(true);
+        setError("");
 
-      setDownloadUrl(profileUrl);
-    };
+        const url =
+          `${window.location.origin}/q/${slug}`;
+
+        await QRCode.toCanvas(
+          canvasRef.current,
+          url,
+          {
+            width: 360,
+            margin: 3,
+            errorCorrectionLevel: "H",
+          }
+        );
+
+        setProfileUrl(url);
+      } catch {
+        setError(
+          "Unable to generate the QR code. Please refresh and try again."
+        );
+      } finally {
+        setIsGenerating(false);
+      }
+    }
 
     generateQRCode();
   }, [slug]);
 
   async function copyProfileUrl() {
-    if (!downloadUrl) return;
+    if (!profileUrl) return;
 
-    await navigator.clipboard.writeText(downloadUrl);
+    try {
+      await navigator.clipboard.writeText(
+        profileUrl
+      );
 
-    setCopied(true);
+      setCopied(true);
 
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch {
+      setError(
+        "Unable to copy the link. Please copy it manually."
+      );
+    }
   }
 
-  function downloadQRCode() {
-    if (!canvasRef.current) return;
+  async function downloadQRCode() {
+    if (
+      !profileUrl ||
+      isDownloading
+    ) {
+      return;
+    }
 
-    const link = document.createElement("a");
+    try {
+      setIsDownloading(true);
+      setError("");
 
-    link.download = `${slug}-qr-code.png`;
-    link.href = canvasRef.current.toDataURL("image/png");
+      const largeCanvas =
+        document.createElement("canvas");
 
-    link.click();
+      await QRCode.toCanvas(
+        largeCanvas,
+        profileUrl,
+        {
+          width: 1600,
+          margin: 4,
+          errorCorrectionLevel: "H",
+        }
+      );
+
+      const link =
+        document.createElement("a");
+
+      link.download =
+        `${slug}-qr-code.png`;
+
+      link.href =
+        largeCanvas.toDataURL(
+          "image/png"
+        );
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch {
+      setError(
+        "Unable to download the QR code. Please try again."
+      );
+    } finally {
+      setIsDownloading(false);
+    }
   }
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <div>
-        <h2 className="text-lg font-semibold">
-          Your QR code
-        </h2>
+    <div className="space-y-8">
+      <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-10">
+        <div className="flex justify-center">
+          <div className="relative inline-flex rounded-3xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+            {isGenerating && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-white/90">
+                <Loader2 className="h-7 w-7 animate-spin text-gray-500" />
 
-        <p className="mt-1 text-sm text-gray-500">
-          Anyone who scans this QR code will see your business profile.
-        </p>
-      </div>
+                <span className="sr-only">
+                  Generating QR code
+                </span>
+              </div>
+            )}
 
-      <div className="mt-6 flex flex-col items-center">
-        <div className="rounded-xl border border-gray-200 bg-white p-4">
-          <canvas ref={canvasRef} />
+            <canvas
+              ref={canvasRef}
+              className="block h-auto max-w-full"
+              aria-label={`${businessName} QR code`}
+            />
+          </div>
         </div>
 
-        <p className="mt-4 break-all text-center text-sm text-gray-500">
-          {downloadUrl}
-        </p>
+        {profileUrl && (
+          <div className="mx-auto mt-8 max-w-lg">
+            <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
+              Digital profile
+            </p>
 
-        <div className="mt-5 flex w-full max-w-sm gap-3">
+            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 p-2 pl-4">
+              <p className="min-w-0 flex-1 truncate text-sm text-gray-600">
+                {profileUrl}
+              </p>
+
+              <a
+                href={profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-500 transition hover:bg-white hover:text-gray-950"
+                aria-label="Open public profile"
+              >
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div
+            role="alert"
+            className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </div>
+        )}
+
+        <div className="mx-auto mt-8 grid max-w-lg gap-3 sm:grid-cols-2">
           <button
             type="button"
             onClick={downloadQRCode}
-            className="flex-1 rounded-lg bg-gray-900 px-4 py-3 font-medium text-white"
+            disabled={
+              isGenerating ||
+              isDownloading ||
+              !profileUrl
+            }
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gray-950 px-4 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Download QR
+            {isDownloading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Preparing...
+              </>
+            ) : (
+              <>
+                <Download className="h-4 w-4" />
+                Download QR Code
+              </>
+            )}
           </button>
 
           <button
             type="button"
             onClick={copyProfileUrl}
-            className="rounded-lg border border-gray-300 px-4 py-3 font-medium"
+            disabled={
+              isGenerating ||
+              !profileUrl
+            }
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-900 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {copied ? "Copied" : "Copy Link"}
+            {copied ? (
+              <>
+                <Check className="h-4 w-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4" />
+                Copy Link
+              </>
+            )}
           </button>
         </div>
 
-        <p className="mt-4 text-center text-xs text-gray-400">
-          {businessName} QR profile
+        <p className="mt-5 text-center text-xs text-gray-400">
+          High-resolution PNG suitable for print
+          and digital use.
         </p>
-      </div>
+      </section>
+
+      <section className="border-t border-gray-200 pt-8">
+        <h2 className="text-lg font-semibold text-gray-950">
+          Use it on
+        </h2>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            "Business cards",
+            "Packaging",
+            "Flyers",
+            "Signs",
+          ].map((item) => (
+            <div
+              key={item}
+              className="rounded-xl border border-gray-200 bg-white px-4 py-4 text-center text-sm font-medium text-gray-700"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -5,22 +5,37 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
   const supabase = createClient();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleSignup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setLoading(true);
     setError("");
+    setMessage("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -31,8 +46,17 @@ export default function LoginPage() {
       return;
     }
 
-    router.replace("/dashboard");
-    router.refresh();
+    if (data.session) {
+      router.replace("/dashboard");
+      router.refresh();
+      return;
+    }
+
+    setMessage(
+      "Your account has been created. Check your email to confirm your account."
+    );
+
+    setLoading(false);
   }
 
   return (
@@ -46,14 +70,14 @@ export default function LoginPage() {
         </Link>
 
         <h1 className="mt-6 text-2xl font-bold text-gray-900">
-          Sign in
+          Create your account
         </h1>
 
         <p className="mt-2 text-sm text-gray-600">
-          Manage your business QR profiles.
+          Create an account to manage your business QR profiles.
         </p>
 
-        <form onSubmit={handleLogin} className="mt-8 space-y-5">
+        <form onSubmit={handleSignup} className="mt-8 space-y-5">
           <div>
             <label
               htmlFor="email"
@@ -86,11 +110,35 @@ export default function LoginPage() {
               id="password"
               type="password"
               required
-              autoComplete="current-password"
+              minLength={6}
+              autoComplete="new-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
-              placeholder="Enter your password"
+              placeholder="At least 6 characters"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="mb-2 block text-sm font-medium"
+            >
+              Confirm password
+            </label>
+
+            <input
+              id="confirmPassword"
+              type="password"
+              required
+              minLength={6}
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(event) =>
+                setConfirmPassword(event.target.value)
+              }
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
+              placeholder="Enter your password again"
             />
           </div>
 
@@ -103,22 +151,28 @@ export default function LoginPage() {
             </p>
           )}
 
+          {message && (
+            <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
+              {message}
+            </p>
+          )}
+
           <button
             type="submit"
             disabled={loading}
             className="w-full rounded-lg bg-gray-900 px-4 py-3 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Creating account..." : "Create account"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/signup"
+            href="/login"
             className="font-medium text-gray-900 underline"
           >
-            Create one
+            Sign in
           </Link>
         </p>
       </div>

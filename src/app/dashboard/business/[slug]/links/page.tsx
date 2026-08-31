@@ -1,6 +1,11 @@
-import { notFound, redirect } from "next/navigation";
+import {
+  notFound,
+  redirect,
+} from "next/navigation";
+
 import { createClient } from "@/lib/supabase/server";
 import LinkManager from "@/components/LinkManager";
+import BusinessNavigation from "@/components/BusinessNavigation";
 
 type Props = {
   params: Promise<{
@@ -8,7 +13,9 @@ type Props = {
   }>;
 };
 
-export default async function LinksPage({ params }: Props) {
+export default async function BusinessLinksPage({
+  params,
+}: Props) {
   const { slug } = await params;
 
   const supabase = await createClient();
@@ -21,59 +28,58 @@ export default async function LinksPage({ params }: Props) {
     redirect("/login");
   }
 
-  const { data: business } = await supabase
-    .from("businesses")
-    .select("id, name, slug")
-    .eq("slug", slug)
-    .eq("owner_id", user.id)
-    .single();
+  const { data: business, error } =
+    await supabase
+      .from("businesses")
+      .select(`
+        id,
+        name,
+        slug
+      `)
+      .eq("slug", slug)
+      .eq("owner_id", user.id)
+      .single();
 
-  if (!business) {
+  if (error || !business) {
     notFound();
   }
 
-  const { data: links, error } = await supabase
+  const { data: links } = await supabase
     .from("links")
-    .select("*")
-    .eq("business_id", business.id)
-    .order("position", { ascending: true });
-
-  if (error) {
-    return (
-      <main className="p-8">
-        <h1 className="text-xl font-bold">
-          Something went wrong
-        </h1>
-
-        <p className="mt-2 text-gray-600">
-          {error.message}
-        </p>
-      </main>
-    );
-  }
+    .select(`
+      id,
+      business_id,
+      title,
+      url,
+      icon,
+      type,
+      value,
+      position,
+      active
+    `)
+    .eq(
+      "business_id",
+      business.id
+    )
+    .order("position", {
+      ascending: true,
+    });
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-10">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8">
-          <p className="text-sm text-gray-500">
-            Link Management
-          </p>
+    <main className="min-h-screen bg-[#F7F7F5]">
+      <BusinessNavigation
+        slug={business.slug}
+        businessName={business.name}
+      />
 
-          <h1 className="mt-1 text-3xl font-bold text-gray-900">
-            {business.name}
-          </h1>
-
-          <p className="mt-2 text-gray-600">
-            Manage the links visitors see on your QR profile.
-          </p>
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="max-w-3xl">
+          <LinkManager
+            businessId={business.id}
+            initialLinks={links ?? []}
+          />
         </div>
-
-        <LinkManager
-          businessId={business.id}
-          initialLinks={links ?? []}
-        />
-      </div>
+      </section>
     </main>
   );
 }
