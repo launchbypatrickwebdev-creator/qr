@@ -18,10 +18,6 @@ const navItems = [
     label: "Account",
   },
   {
-    href: "/faq",
-    label: "FAQ",
-  },
-  {
     href: "/contact",
     label: "Support",
   },
