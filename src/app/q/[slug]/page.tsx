@@ -87,15 +87,17 @@ export default async function BusinessPage({
     "#F9FAFB";
 
   const buttonStyle =
-    business.button_style ||
-    "rounded";
+      business.button_style ||
+      "rounded";
 
-  const buttonRadius =
-    {
+    const buttonStyles = {
       rounded: "1rem",
       square: "0.25rem",
       pill: "9999px",
-    }[buttonStyle] || "1rem";
+    };
+
+    const buttonRadius =
+      buttonStyles[buttonStyle as keyof typeof buttonStyles] || "1rem";
 
   const textColor =
     getContrastTextColor(
