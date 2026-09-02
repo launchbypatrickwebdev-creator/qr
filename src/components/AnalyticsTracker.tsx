@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { createClient } from "@/lib/supabase/client";
-
 type ProfileViewTrackerProps = {
   businessId: string;
 };
@@ -14,25 +12,59 @@ type ActionClickTrackerProps = {
   actionName: string;
 };
 
+async function recordAnalyticsEvent({
+  businessId,
+  linkId = null,
+  eventType,
+  actionName = null,
+}: {
+  businessId: string;
+  linkId?: string | null;
+  eventType: "profile_view" | "action_click";
+  actionName?: string | null;
+}) {
+  try {
+    const response = await fetch("/api/analytics", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        business_id: businessId,
+        link_id: linkId,
+        event_type: eventType,
+        action_name: actionName,
+      }),
+      keepalive: true,
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+
+      console.error(
+        "Analytics tracking failed:",
+        data?.error || `HTTP ${response.status}`
+      );
+    }
+  } catch (error) {
+    console.error("Analytics tracking request failed:", error);
+  }
+}
+
 export function ProfileViewTracker({
   businessId,
 }: ProfileViewTrackerProps) {
   const tracked = useRef(false);
 
   useEffect(() => {
-    if (tracked.current) {
-      return;
-    }
+    if (tracked.current) return;
 
     tracked.current = true;
 
-    const supabase = createClient();
-
-    void supabase.rpc("track_analytics_event", {
-      p_business_id: businessId,
-      p_link_id: null,
-      p_event_type: "profile_view",
-      p_action_name: null,
+    void recordAnalyticsEvent({
+      businessId,
+      eventType: "profile_view",
     });
   }, [businessId]);
 
@@ -44,12 +76,10 @@ export function trackActionClick({
   linkId = null,
   actionName,
 }: ActionClickTrackerProps) {
-  const supabase = createClient();
-
-  void supabase.rpc("track_analytics_event", {
-    p_business_id: businessId,
-    p_link_id: linkId,
-    p_event_type: "action_click",
-    p_action_name: actionName,
+  void recordAnalyticsEvent({
+    businessId,
+    linkId,
+    eventType: "action_click",
+    actionName,
   });
 }
