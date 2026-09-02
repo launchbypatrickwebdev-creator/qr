@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   ArrowUpRight,
   Link2,
+  MessageSquare,
   QrCode,
 } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -63,6 +64,14 @@ export default async function DashboardPage() {
                 customer actions, and QR codes.
               </p>
             </div>
+
+            <Link
+              href="/feedback"
+              className="inline-flex min-h-10 w-fit items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-800 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 hover:text-gray-950"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Feedback
+            </Link>
           </header>
 
           <div className="mt-10">

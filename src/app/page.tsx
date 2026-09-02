@@ -9,7 +9,10 @@ import {
   Phone,
   QrCode,
   Share2,
+  Star,
 } from "lucide-react";
+
+import { createClient } from "@/lib/supabase/server";
 
 const features = [
   {
@@ -51,7 +54,19 @@ const actions = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+
+  const { data: approvedFeedback } = await supabase
+    .from("feedback")
+    .select(
+      "id, rating, message, display_name, business_name, created_at"
+    )
+    .eq("is_public", true)
+    .eq("is_approved", true)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
   return (
     <main className="min-h-screen bg-[#F7F7F5] text-gray-950">
       {/* Header */}
@@ -533,6 +548,91 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Feedback */}
+      <section className="border-b border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-24 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+              From QR users
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+              What businesses are saying.
+            </h2>
+
+            <p className="mt-4 text-base leading-7 text-gray-600">
+              See what people using QR have shared about their experience.
+            </p>
+          </div>
+
+          {approvedFeedback && approvedFeedback.length > 0 ? (
+            <div className="mt-12 grid gap-5 md:grid-cols-3">
+              {approvedFeedback.map((feedback) => (
+                <article
+                  key={feedback.id}
+                  className="rounded-2xl border border-gray-200 bg-[#F7F7F5] p-7"
+                >
+                  <div
+                    className="flex gap-1"
+                    aria-label={`${feedback.rating} out of 5 stars`}
+                  >
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <Star
+                        key={index}
+                        className={`h-4 w-4 ${
+                          index < feedback.rating
+                            ? "fill-current text-gray-950"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <blockquote className="mt-5 text-sm leading-7 text-gray-700">
+                    “{feedback.message}”
+                  </blockquote>
+
+                  <div className="mt-6 border-t border-gray-200 pt-5">
+                    {feedback.display_name && (
+                      <p className="text-sm font-semibold text-gray-950">
+                        {feedback.display_name}
+                      </p>
+                    )}
+
+                    {feedback.business_name && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        {feedback.business_name}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-gray-200 bg-[#F7F7F5] p-8 text-center sm:p-10">
+              <p className="text-base font-semibold text-gray-950">
+                We’re building QR with our users.
+              </p>
+
+              <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-gray-600">
+                Have you used QR? Share your experience and help us make it
+                better for businesses everywhere.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/feedback"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-950 transition hover:text-gray-600"
+            >
+              Share your experience
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="bg-[#F7F7F5]">
         <div className="mx-auto max-w-4xl px-5 py-20 text-center sm:px-6 sm:py-24">
@@ -646,6 +746,13 @@ export default function HomePage() {
                   className="block text-sm text-gray-500 transition hover:text-gray-950"
                 >
                   Contact us
+                </Link>
+
+                <Link
+                  href="/feedback"
+                  className="block text-sm text-gray-500 transition hover:text-gray-950"
+                >
+                  Feedback
                 </Link>
               </div>
             </div>
