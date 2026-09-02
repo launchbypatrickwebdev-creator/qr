@@ -557,7 +557,7 @@ export default async function HomePage() {
             </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-              What businesses are saying.
+              What QR users are saying.
             </h2>
 
             <p className="mt-4 text-base leading-7 text-gray-600">

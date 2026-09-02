@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import {
+  BarChart3,
   ExternalLink,
   Link2,
   Pencil,
@@ -31,6 +33,11 @@ export default function BusinessNavigation({
       href: `/dashboard/business/${slug}/links`,
       label: "Actions",
       icon: Link2,
+    },
+    {
+      href: `/dashboard/business/${slug}/analytics`,
+      label: "Analytics",
+      icon: BarChart3,
     },
     {
       href: `/dashboard/business/${slug}/qr`,

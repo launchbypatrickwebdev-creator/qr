@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 
-import { ExternalLink } from "lucide-react";
-
 import { createClient } from "@/lib/supabase/server";
-import ActionIcon from "@/components/ActionIcon";
+
+import TrackedActionButton from "@/components/TrackedActionButton";
+import { ProfileViewTracker } from "@/components/AnalyticsTracker";
 
 import {
   getBusinessInitials,
@@ -30,8 +30,7 @@ export default async function BusinessPage({
 }: Props) {
   const { slug } = await params;
 
-  const supabase =
-    await createClient();
+  const supabase = await createClient();
 
   const {
     data: business,
@@ -59,61 +58,50 @@ export default async function BusinessPage({
     notFound();
   }
 
-  const { data: links } =
-    await supabase
-      .from("links")
-      .select(`
-        id,
-        title,
-        url,
-        type,
-        position
-      `)
-      .eq(
-        "business_id",
-        business.id
-      )
-      .eq("active", true)
-      .order("position", {
-        ascending: true,
-      });
+  const { data: links } = await supabase
+    .from("links")
+    .select(`
+      id,
+      title,
+      url,
+      type,
+      position
+    `)
+    .eq("business_id", business.id)
+    .eq("active", true)
+    .order("position", {
+      ascending: true,
+    });
 
   const themeColor =
-    business.theme_color ||
-    "#111827";
+    business.theme_color || "#111827";
 
   const backgroundColor =
-    business.background_color ||
-    "#F9FAFB";
+    business.background_color || "#F9FAFB";
 
   const buttonStyle =
-      business.button_style ||
-      "rounded";
+    business.button_style || "rounded";
 
-    const buttonStyles = {
-      rounded: "1rem",
-      square: "0.25rem",
-      pill: "9999px",
-    };
+  const buttonStyles = {
+    rounded: "1rem",
+    square: "0.25rem",
+    pill: "9999px",
+  };
 
-    const buttonRadius =
-      buttonStyles[buttonStyle as keyof typeof buttonStyles] || "1rem";
+  const buttonRadius =
+    buttonStyles[
+      buttonStyle as keyof typeof buttonStyles
+    ] || "1rem";
 
   const textColor =
-    getContrastTextColor(
-      backgroundColor
-    );
+    getContrastTextColor(backgroundColor);
 
   const mutedTextColor =
-    getMutedTextColor(
-      backgroundColor
-    );
+    getMutedTextColor(backgroundColor);
 
-  const automaticActions: Action[] =
-    [];
+  const automaticActions: Action[] = [];
 
-  const customActions: Action[] =
-    [];
+  const customActions: Action[] = [];
 
   if (business.phone) {
     automaticActions.push({
@@ -181,61 +169,6 @@ export default async function BusinessPage({
     ...customActions,
   ];
 
-  function ActionButton({
-    action,
-  }: {
-    action: Action;
-  }) {
-    return (
-      <a
-        href={action.url}
-        target={
-          action.external
-            ? "_blank"
-            : undefined
-        }
-        rel={
-          action.external
-            ? "noopener noreferrer"
-            : undefined
-        }
-        className="group flex min-h-[68px] items-center gap-4 border bg-white/95 px-4 py-3 text-gray-900 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
-        style={{
-          borderRadius: buttonRadius,
-          borderColor:
-            "rgba(0,0,0,0.08)",
-        }}
-      >
-        <span
-          className="flex h-11 w-11 shrink-0 items-center justify-center text-white shadow-sm"
-          style={{
-            backgroundColor:
-              themeColor,
-            borderRadius:
-              buttonRadius,
-          }}
-        >
-          <ActionIcon
-            type={action.type}
-          />
-        </span>
-
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-left text-sm font-semibold">
-            {action.title}
-          </span>
-        </span>
-
-        {action.external && (
-          <ExternalLink
-            className="h-4 w-4 shrink-0 text-gray-400 transition group-hover:text-gray-700"
-            strokeWidth={2}
-          />
-        )}
-      </a>
-    );
-  }
-
   return (
     <main
       className="min-h-screen px-4 py-10 sm:px-5 sm:py-14"
@@ -244,6 +177,10 @@ export default async function BusinessPage({
         color: textColor,
       }}
     >
+      <ProfileViewTracker
+        businessId={business.id}
+      />
+
       <div className="mx-auto max-w-md">
         <section className="text-center">
           {business.logo_url ? (
@@ -273,8 +210,7 @@ export default async function BusinessPage({
             <p
               className="mx-auto mt-3 max-w-sm text-sm leading-6"
               style={{
-                color:
-                  mutedTextColor,
+                color: mutedTextColor,
               }}
             >
               {business.description}
@@ -283,26 +219,21 @@ export default async function BusinessPage({
             <p
               className="mx-auto mt-3 max-w-sm text-sm"
               style={{
-                color:
-                  mutedTextColor,
+                color: mutedTextColor,
               }}
             >
-              Connect with{" "}
-              {business.name}.
+              Connect with {business.name}.
             </p>
           )}
         </section>
 
-        {automaticActions.length >
-          0 && (
+        {automaticActions.length > 0 && (
           <section className="mt-10">
-            {customActions.length >
-              0 && (
+            {customActions.length > 0 && (
               <p
                 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em]"
                 style={{
-                  color:
-                    mutedTextColor,
+                  color: mutedTextColor,
                 }}
               >
                 Contact
@@ -312,9 +243,16 @@ export default async function BusinessPage({
             <div className="space-y-3">
               {automaticActions.map(
                 (action) => (
-                  <ActionButton
+                  <TrackedActionButton
                     key={action.id}
-                    action={action}
+                    businessId={business.id}
+                    linkId={null}
+                    title={action.title}
+                    type={action.type}
+                    url={action.url}
+                    external={action.external}
+                    buttonRadius={buttonRadius}
+                    themeColor={themeColor}
                   />
                 )
               )}
@@ -322,16 +260,13 @@ export default async function BusinessPage({
           </section>
         )}
 
-        {customActions.length >
-          0 && (
+        {customActions.length > 0 && (
           <section className="mt-8">
-            {automaticActions.length >
-              0 && (
+            {automaticActions.length > 0 && (
               <p
                 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em]"
                 style={{
-                  color:
-                    mutedTextColor,
+                  color: mutedTextColor,
                 }}
               >
                 More
@@ -341,9 +276,16 @@ export default async function BusinessPage({
             <div className="space-y-3">
               {customActions.map(
                 (action) => (
-                  <ActionButton
+                  <TrackedActionButton
                     key={action.id}
-                    action={action}
+                    businessId={business.id}
+                    linkId={action.id}
+                    title={action.title}
+                    type={action.type}
+                    url={action.url}
+                    external={action.external}
+                    buttonRadius={buttonRadius}
+                    themeColor={themeColor}
                   />
                 )
               )}
@@ -351,11 +293,8 @@ export default async function BusinessPage({
           </section>
         )}
 
-        {allActions.length ===
-          0 && (
-          <section
-            className="mt-10 rounded-2xl border border-dashed border-gray-300 bg-white/70 p-7 text-center shadow-sm"
-          >
+        {allActions.length === 0 && (
+          <section className="mt-10 rounded-2xl border border-dashed border-gray-300 bg-white/70 p-7 text-center shadow-sm">
             <h2 className="font-semibold text-gray-900">
               No actions available yet
             </h2>
@@ -370,8 +309,7 @@ export default async function BusinessPage({
         <footer
           className="mt-14 pb-4 text-center"
           style={{
-            color:
-              mutedTextColor,
+            color: mutedTextColor,
           }}
         >
           <p className="text-xs">
