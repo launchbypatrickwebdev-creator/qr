@@ -1,7 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import {
+  FormEvent,
+  useState,
+} from "react";
+
 import { useRouter } from "next/navigation";
+
 import {
   ArrowRight,
   Building2,
@@ -13,29 +18,60 @@ import {
 
 import { createClient } from "@/lib/supabase/client";
 
-function createSlug(name: string) {
+import {
+  recordMarketingEvent,
+} from "@/lib/marketing-attribution";
+
+function createSlug(
+  name: string
+) {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(
+      /[^a-z0-9\s-]/g,
+      ""
+    )
+    .replace(
+      /\s+/g,
+      "-"
+    )
+    .replace(
+      /-+/g,
+      "-"
+    )
+    .replace(
+      /^-|-$/g,
+      "");
 }
 
 export default function CreateBusinessForm() {
   const router = useRouter();
   const supabase = createClient();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [phone, setPhone] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
+  const [name, setName] =
+    useState("");
 
-  const [creating, setCreating] = useState(false);
-  const [error, setError] = useState("");
+  const [description, setDescription] =
+    useState("");
+
+  const [phone, setPhone] =
+    useState("");
+
+  const [whatsapp, setWhatsapp] =
+    useState("");
+
+  const [email, setEmail] =
+    useState("");
+
+  const [location, setLocation] =
+    useState("");
+
+  const [creating, setCreating] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
 
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>
@@ -48,23 +84,32 @@ export default function CreateBusinessForm() {
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } =
+      await supabase.auth.getUser();
 
-    if (userError || !user) {
+    if (
+      userError ||
+      !user
+    ) {
       setError(
         "You must be signed in to create a business."
       );
+
       setCreating(false);
+
       return;
     }
 
-    const baseSlug = createSlug(name);
+    const baseSlug =
+      createSlug(name);
 
     if (!baseSlug) {
       setError(
         "Please enter a valid business name."
       );
+
       setCreating(false);
+
       return;
     }
 
@@ -73,23 +118,34 @@ export default function CreateBusinessForm() {
     const {
       data: existingBusinesses,
       error: slugError,
-    } = await supabase
-      .from("businesses")
-      .select("slug")
-      .like("slug", `${baseSlug}%`);
+    } =
+      await supabase
+        .from("businesses")
+        .select("slug")
+        .like(
+          "slug",
+          `${baseSlug}%`
+        );
 
     if (slugError) {
-      setError(slugError.message);
+      setError(
+        slugError.message
+      );
+
       setCreating(false);
+
       return;
     }
 
     const existingSlugs =
       existingBusinesses?.map(
-        (business) => business.slug
+        (business) =>
+          business.slug
       ) ?? [];
 
-    if (existingSlugs.includes(slug)) {
+    if (
+      existingSlugs.includes(slug)
+    ) {
       let number = 2;
 
       while (
@@ -100,33 +156,69 @@ export default function CreateBusinessForm() {
         number++;
       }
 
-      slug = `${baseSlug}-${number}`;
+      slug =
+        `${baseSlug}-${number}`;
     }
 
-    const { error: insertError } = await supabase
-      .from("businesses")
-      .insert({
-        owner_id: user.id,
-        name,
-        slug,
-        description: description || null,
-        phone: phone || null,
-        whatsapp: whatsapp || null,
-        email: email || null,
-        location: location || null,
-        theme_color: "#111827",
-        background_color: "#F9FAFB",
-        button_style: "rounded",
-      });
+    const {
+      data: business,
+      error: insertError,
+    } =
+      await supabase
+        .from("businesses")
+        .insert({
+          owner_id: user.id,
+          name,
+          slug,
+          description:
+            description || null,
+          phone:
+            phone || null,
+          whatsapp:
+            whatsapp || null,
+          email:
+            email || null,
+          location:
+            location || null,
+          theme_color:
+            "#111827",
+          background_color:
+            "#F9FAFB",
+          button_style:
+            "rounded",
+        })
+        .select("id, slug")
+        .single();
 
-    if (insertError) {
-      setError(insertError.message);
+    if (
+      insertError ||
+      !business
+    ) {
+      setError(
+        insertError?.message ||
+          "Unable to create business."
+      );
+
       setCreating(false);
+
       return;
     }
 
+    /*
+     * Connect the visitor's
+     * marketing attribution to
+     * the newly created business.
+     *
+     * Failure here must NOT prevent
+     * the business from being created.
+     */
+    void recordMarketingEvent(
+      "business_created",
+      business.id
+    );
+
     router.push(
-      `/dashboard/business/${slug}`
+      `/dashboard/business/${business.slug}`
     );
 
     router.refresh();
@@ -178,17 +270,18 @@ export default function CreateBusinessForm() {
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
             />
 
-            {name && createSlug(name) && (
-              <div className="mt-3 rounded-xl bg-gray-50 px-4 py-3">
-                <p className="text-xs font-medium text-gray-500">
-                  Your public profile
-                </p>
+            {name &&
+              createSlug(name) && (
+                <div className="mt-3 rounded-xl bg-gray-50 px-4 py-3">
+                  <p className="text-xs font-medium text-gray-500">
+                    Your public profile
+                  </p>
 
-                <p className="mt-1 font-mono text-sm text-gray-900">
-                  /q/{createSlug(name)}
-                </p>
-              </div>
-            )}
+                  <p className="mt-1 font-mono text-sm text-gray-900">
+                    /q/{createSlug(name)}
+                  </p>
+                </div>
+              )}
           </div>
 
           <div>
@@ -203,7 +296,9 @@ export default function CreateBusinessForm() {
               id="description"
               value={description}
               onChange={(event) =>
-                setDescription(event.target.value)
+                setDescription(
+                  event.target.value
+                )
               }
               rows={4}
               placeholder="Tell customers what your business does"
@@ -239,7 +334,9 @@ export default function CreateBusinessForm() {
               type="tel"
               value={phone}
               onChange={(event) =>
-                setPhone(event.target.value)
+                setPhone(
+                  event.target.value
+                )
               }
               placeholder="08012345678"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
@@ -260,7 +357,9 @@ export default function CreateBusinessForm() {
               type="tel"
               value={whatsapp}
               onChange={(event) =>
-                setWhatsapp(event.target.value)
+                setWhatsapp(
+                  event.target.value
+                )
               }
               placeholder="2348012345678"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
@@ -281,7 +380,9 @@ export default function CreateBusinessForm() {
               type="email"
               value={email}
               onChange={(event) =>
-                setEmail(event.target.value)
+                setEmail(
+                  event.target.value
+                )
               }
               placeholder="business@example.com"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
@@ -301,7 +402,9 @@ export default function CreateBusinessForm() {
               id="location"
               value={location}
               onChange={(event) =>
-                setLocation(event.target.value)
+                setLocation(
+                  event.target.value
+                )
               }
               placeholder="Lagos, Nigeria"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"

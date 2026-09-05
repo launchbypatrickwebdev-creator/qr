@@ -1,41 +1,72 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import {
+  FormEvent,
+  useState,
+} from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/client";
+
+import {
+  recordMarketingEvent,
+} from "@/lib/marketing-attribution";
 
 export default function SignupPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] =
+    useState("");
 
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [password, setPassword] =
+    useState("");
 
-  async function handleSignup(event: FormEvent<HTMLFormElement>) {
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  const [message, setMessage] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  async function handleSignup(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setError("");
     setMessage("");
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(
+        "Password must be at least 6 characters."
+      );
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (
+      password !==
+      confirmPassword
+    ) {
+      setError(
+        "Passwords do not match."
+      );
       return;
     }
 
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signUp({
+    const {
+      data,
+      error,
+    } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -46,9 +77,30 @@ export default function SignupPage() {
       return;
     }
 
+    /*
+     * Record signup attribution.
+     *
+     * This is intentionally done after
+     * Supabase confirms account creation.
+     *
+     * It also works when email confirmation
+     * means there is no active session yet.
+     */
+    void recordMarketingEvent(
+      "signup"
+    );
+
     if (data.session) {
-      router.replace("/dashboard");
+      void recordMarketingEvent(
+        "identified"
+      );
+
+      router.replace(
+        "/dashboard"
+      );
+
       router.refresh();
+
       return;
     }
 
@@ -77,7 +129,10 @@ export default function SignupPage() {
           Create an account to manage your business QR profiles.
         </p>
 
-        <form onSubmit={handleSignup} className="mt-8 space-y-5">
+        <form
+          onSubmit={handleSignup}
+          className="mt-8 space-y-5"
+        >
           <div>
             <label
               htmlFor="email"
@@ -92,7 +147,9 @@ export default function SignupPage() {
               required
               autoComplete="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
               placeholder="you@example.com"
             />
@@ -113,7 +170,9 @@ export default function SignupPage() {
               minLength={6}
               autoComplete="new-password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
               placeholder="At least 6 characters"
             />
@@ -135,7 +194,9 @@ export default function SignupPage() {
               autoComplete="new-password"
               value={confirmPassword}
               onChange={(event) =>
-                setConfirmPassword(event.target.value)
+                setConfirmPassword(
+                  event.target.value
+                )
               }
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
               placeholder="Enter your password again"
@@ -162,7 +223,9 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full rounded-lg bg-gray-900 px-4 py-3 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Creating account..." : "Create account"}
+            {loading
+              ? "Creating account..."
+              : "Create account"}
           </button>
         </form>
 

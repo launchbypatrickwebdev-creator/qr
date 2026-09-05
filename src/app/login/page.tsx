@@ -1,37 +1,72 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import {
+  FormEvent,
+  useState,
+} from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/client";
+
+import {
+  recordMarketingEvent,
+} from "@/lib/marketing-attribution";
 
 export default function LoginPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] =
+    useState("");
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  const [password, setPassword] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  async function handleLogin(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const {
+      error: loginError,
+    } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
+    if (loginError) {
+      setError(
+        loginError.message
+      );
       setLoading(false);
       return;
     }
 
-    router.replace("/dashboard");
+    /*
+     * Associate this visitor's
+     * first-touch attribution with
+     * their authenticated account.
+     */
+    void recordMarketingEvent(
+      "identified"
+    );
+
+    router.replace(
+      "/dashboard"
+    );
+
     router.refresh();
   }
 
@@ -53,7 +88,10 @@ export default function LoginPage() {
           Manage your business QR profiles.
         </p>
 
-        <form onSubmit={handleLogin} className="mt-8 space-y-5">
+        <form
+          onSubmit={handleLogin}
+          className="mt-8 space-y-5"
+        >
           <div>
             <label
               htmlFor="email"
@@ -68,7 +106,9 @@ export default function LoginPage() {
               required
               autoComplete="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
               placeholder="you@example.com"
             />
@@ -88,7 +128,9 @@ export default function LoginPage() {
               required
               autoComplete="current-password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
               className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-gray-900"
               placeholder="Enter your password"
             />
@@ -108,7 +150,9 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full rounded-lg bg-gray-900 px-4 py-3 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading
+              ? "Signing in..."
+              : "Sign in"}
           </button>
         </form>
 

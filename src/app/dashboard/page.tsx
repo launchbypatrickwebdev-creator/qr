@@ -4,6 +4,7 @@ import {
   Link2,
   MessageSquare,
   QrCode,
+  ShieldCheck,
 } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -37,13 +38,18 @@ export default async function DashboardPage() {
             Something went wrong
           </h1>
 
-          <p className="mt-2 text-gray-600">
-            {error.message}
-          </p>
+          <p className="mt-2 text-gray-600">{error.message}</p>
         </div>
       </div>
     );
   }
+
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+
+  const isAdmin =
+    Boolean(adminEmail) &&
+    Boolean(user.email) &&
+    user.email.trim().toLowerCase() === adminEmail;
 
   return (
     <main className="min-h-screen bg-[#F7F7F5]">
@@ -60,8 +66,8 @@ export default async function DashboardPage() {
               </h1>
 
               <p className="mt-2 max-w-xl text-sm leading-6 text-gray-600">
-                Manage your digital business profiles,
-                customer actions, and QR codes.
+                Manage your digital business profiles, customer actions, and
+                QR codes.
               </p>
             </div>
 
@@ -74,6 +80,50 @@ export default async function DashboardPage() {
             </Link>
           </header>
 
+          {isAdmin && (
+            <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gray-950 text-white">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+                      Administration
+                    </p>
+
+                    <h2 className="mt-1 text-lg font-bold tracking-tight text-gray-950">
+                      Platform administration
+                    </h2>
+
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                      Review and manage feedback submitted by QR users.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/admin/feedback"
+                    className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-gray-950 px-5 text-sm font-semibold text-white transition hover:bg-gray-800"
+                  >
+                    Manage Feedback
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+
+                  <Link
+                    href="/admin/marketing"
+                    className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
+                  >
+                    Marketing Attribution
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </section>
+          )}
+
           <div className="mt-10">
             {businesses?.length === 0 ? (
               <section className="rounded-3xl border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-12">
@@ -82,9 +132,8 @@ export default async function DashboardPage() {
                 </h2>
 
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-600">
-                  Create your first digital business
-                  profile to start sharing your business
-                  with customers.
+                  Create your first digital business profile to start sharing
+                  your business with customers.
                 </p>
 
                 <Link
@@ -114,14 +163,10 @@ export default async function DashboardPage() {
                             <div
                               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-gray-200 bg-gray-50 text-base font-bold"
                               style={{
-                                color:
-                                  business.theme_color ||
-                                  "#111827",
+                                color: business.theme_color || "#111827",
                               }}
                             >
-                              {getBusinessInitials(
-                                business.name
-                              )}
+                              {getBusinessInitials(business.name)}
                             </div>
                           )}
 
