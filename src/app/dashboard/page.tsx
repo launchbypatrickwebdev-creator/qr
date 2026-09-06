@@ -45,11 +45,12 @@ export default async function DashboardPage() {
   }
 
   const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const userEmail = user.email?.trim().toLowerCase();
 
   const isAdmin =
     Boolean(adminEmail) &&
-    Boolean(user.email) &&
-    user.email.trim().toLowerCase() === adminEmail;
+    Boolean(userEmail) &&
+    userEmail === adminEmail;
 
   return (
     <main className="min-h-screen bg-[#F7F7F5]">
