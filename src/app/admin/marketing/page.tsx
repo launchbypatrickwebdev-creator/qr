@@ -541,27 +541,35 @@ export default async function AdminMarketingPage() {
 
           <div className="mt-5 space-y-3 rounded-xl bg-gray-950 p-4 font-mono text-xs leading-6 text-gray-100 sm:text-sm">
             <p>
-              /?source=whatsapp&amp;campaign=free-launch&amp;content=status-01
+              /https://qrfor.vercel.app/?source=whatsapp&amp;campaign=free-launch&amp;content=status-01
             </p>
 
             <p>
-              /?source=facebook&amp;campaign=free-launch&amp;content=group-01
+              /https://qrfor.vercel.app/?source=facebook&amp;campaign=free-launch&amp;content=group-01
             </p>
 
             <p>
-              /?source=instagram&amp;campaign=free-launch&amp;content=comment-01
+              /https://qrfor.vercel.app/?source=instagram&amp;campaign=free-launch&amp;content=comment-01
             </p>
 
             <p>
-              /?source=linkedin&amp;campaign=free-launch&amp;content=group-01
+              /https://qrfor.vercel.app/?source=linkedin&amp;campaign=free-launch&amp;content=group-01
             </p>
 
             <p>
-              /?source=x&amp;campaign=free-launch&amp;content=post-01
+              /https://qrfor.vercel.app/?source=x&amp;campaign=free-launch&amp;content=post-01
             </p>
 
             <p>
-              /?source=reddit&amp;campaign=free-launch&amp;content=post-01
+              /https://qrfor.vercel.app/?source=reddit&campaign=free-launch&content=post-01
+            </p>
+
+            <p>
+              /https://qrfor.vercel.app/?source=reddit&amp;campaign=free-launch&amp;content=post-01
+            </p>
+
+            <p>
+              /https://qrfor.vercel.app/?source=launchads&campaign=campaign-123&content=ad-456
             </p>
           </div>
         </section>
