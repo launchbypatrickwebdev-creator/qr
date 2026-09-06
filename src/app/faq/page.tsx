@@ -80,11 +80,6 @@ const faqSections = [
           "Your QR code opens your public business profile. Customers can scan it with their phone camera or a compatible QR scanner and access the information and actions you have added.",
       },
       {
-        question: "Can I print my QR code?",
-        answer:
-          "Yes. You can download your QR code and use it on printed materials such as signs, business cards, packaging, menus, storefronts, flyers, receipts, or other business materials.",
-      },
-      {
         question: "Does my QR code change when I update my profile?",
         answer:
           "No. Your QR code points to your business profile rather than storing all of your business information inside the image. Updating your profile does not require you to create a new QR code.",
@@ -97,7 +92,7 @@ const faqSections = [
       {
         question: "Can I use my QR code on my business cards or flyers?",
         answer:
-          "Yes. You can download your QR code and place it on business cards, flyers, posters, packaging, signs, menus, promotional materials, and other customer-facing materials.",
+          "Yes. You can download your QR code and place it on business cards, flyers, storefronts, receipts, posters, packaging, signs, menus, promotional materials, and other customer/business facing materials.",
       },
       {
         question: "What happens if I change my phone number or website?",
@@ -117,7 +112,7 @@ const faqSections = [
       {
         question: "What can I see in my analytics?",
         answer:
-          "Your analytics currently include total profile views, total action clicks, activity for today, this week and this month, a recent activity chart, and your most-clicked customer actions.",
+          "Your analytics currently include total profile views, total action clicks, activity for today, this week and this month, a recent activity chart, and your most clicked customer actions.",
       },
       {
         question: "Does a QR scan count as a profile view?",
@@ -132,12 +127,12 @@ const faqSections = [
       {
         question: "Can I see who scanned my QR code?",
         answer:
-          "No. QR's current analytics are designed to show business-level activity rather than identify individual customers. We do not currently provide personal identities for people who visit or interact with your profile.",
+          "No. QR's current analytics are designed to show business level activity rather than identify individual customers. We do not currently provide personal identities for people who visit or interact with your profile.",
       },
       {
         question: "Can I see customer locations or devices?",
         answer:
-          "Not currently. The current analytics system focuses on profile views and action clicks. More advanced analytics may be introduced in the future.",
+          "Not currently. The current analytics system focuses on profile views and action clicks. More advanced analytics will be introduced in the future.",
       },
       {
         question: "How often are analytics updated?",
@@ -157,7 +152,7 @@ const faqSections = [
       {
         question: "Will QR always be free?",
         answer:
-          "We have not finalized the long-term pricing structure yet. QR is currently free for early users, and future plans may introduce additional paid features or plans. Any major changes will be communicated clearly.",
+          "We have not finalized the long term pricing structure yet. QR is currently free for early users, and future plans may introduce additional paid features or plans. Any major changes will be communicated clearly.",
       },
       {
         question: "Are business analytics currently free?",
@@ -167,7 +162,7 @@ const faqSections = [
       {
         question: "Will analytics remain free?",
         answer:
-          "The current analytics experience is free. We may introduce more advanced analytics or additional business features as the platform develops, but the future pricing structure has not been finalized.",
+          "The current analytics experience is free. We will introduce more advanced analytics or additional business features as the platform develops, but the future pricing structure has not been finalized.",
       },
       {
         question: "Why is QR free right now?",
@@ -192,7 +187,7 @@ const faqSections = [
       {
         question: "Does QR identify my customers?",
         answer:
-          "QR's business analytics are focused on aggregate activity such as profile views and action clicks. The current system does not provide you with the personal identity of individual visitors.",
+          "QR's business analytics are focused on aggregate activity such as profile views and action clicks. The current system does not provide you with the personal identity of individual visitors. In the future upgrades businesses will be able to see broader analytics of their profile.",
       },
       {
         question: "What information should I put on my public profile?",
