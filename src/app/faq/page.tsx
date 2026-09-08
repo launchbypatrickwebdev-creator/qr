@@ -3,46 +3,57 @@ import {
   ArrowLeft,
   MessageCircle,
 } from "lucide-react";
+
 import FAQAccordion from "@/components/FAQAccordion";
 
 const faqSections = [
   {
-    title: "Getting Started",
+    title: "Understanding QR",
     items: [
       {
         question: "What is QR?",
         answer:
-          "QR lets you create a digital business profile where customers can find your business information and take actions such as calling, messaging, visiting your website, viewing your social links, or finding your location.",
+          "QR is a digital identity and access platform designed to help people and organizations represent who they are, what they do, and how others can connect with them. Today, QR lets businesses create digital business profiles that can be shared through a link or QR code.",
+      },
+      {
+        question: "Is QR only for QR codes?",
+        answer:
+          "No. The QR code is one way people can access a profile. The profile is the important part. QR is being built around digital identities that can be represented and shared in different ways.",
       },
       {
         question: "Who is QR for?",
         answer:
-          "QR is designed for businesses, entrepreneurs, professionals, creators, shops, restaurants, service providers, and anyone who wants to give customers one simple place to find their business information.",
+          "QR is being built for individuals, businesses, professionals, entrepreneurs, creators, service providers, companies, and other organizations. The current product is focused on digital business profiles, while the platform is being developed toward broader identity use cases.",
       },
+      {
+        question: "What can I create on QR today?",
+        answer:
+          "Today, you can create a digital business profile, add your business information and customer actions, share your profile through a link, generate a QR code, and view business analytics.",
+      },
+      {
+        question: "Can individuals create professional profiles on QR?",
+        answer:
+          "Professional identity profiles are part of the direction QR is being built toward, but the current product is focused on business profiles. The goal is to allow people to represent professional information such as experience, skills, portfolio, credentials, and contact information in a structured digital identity.",
+      },
+      {
+        question: "What is QR building toward?",
+        answer:
+          "QR is being built toward a platform where people and organizations can maintain digital identities and use different representations of those identities depending on the situation. For example, a person could have a professional profile, CV, portfolio, or shareable profile, while an organization could have its company profile, team, services, projects, and other organizational information.",
+      },
+    ],
+  },
+  {
+    title: "Business Profiles",
+    items: [
       {
         question: "How do I create a business profile?",
         answer:
           "Create an account, open your dashboard, select Add Business, and enter your business information. You can then add customer actions, links, and generate your QR code.",
       },
       {
-        question: "Do I need technical knowledge to use QR?",
-        answer:
-          "No. QR is designed to be simple to set up and manage. You can create and update your business profile from your dashboard without needing to write code.",
-      },
-      {
-        question: "Can I use QR for more than one business?",
-        answer:
-          "Yes. You can create and manage business profiles from your account. Each business profile has its own public page and QR code.",
-      },
-    ],
-  },
-  {
-    title: "Business Profile",
-    items: [
-      {
         question: "What information can I put on my business profile?",
         answer:
-          "Your profile can contain information such as your business name, description, logo, phone number, WhatsApp, website, social links, location, and other customer actions you choose to add.",
+          "Your current profile can contain information such as your business name, description, logo, phone number, WhatsApp, email, website, location, social links, and other customer actions you choose to add.",
       },
       {
         question: "Can I change my business information?",
@@ -52,52 +63,52 @@ const faqSections = [
       {
         question: "Can I add my logo?",
         answer:
-          "Yes. Your business profile supports a business logo. You can manage it from your business settings.",
+          "Yes. Your business profile supports a business logo, which you can manage from your business settings.",
       },
       {
         question: "What actions can customers take?",
         answer:
-          "Depending on what you add to your profile, customers can take actions such as calling your business, sending a WhatsApp message, visiting your website, viewing your location, opening your social pages, or accessing other links.",
+          "Depending on what you add to your profile, customers can call your business, send a WhatsApp message, visit your website, view your location, open social links, or access other links you provide.",
       },
       {
-        question: "Can I update my profile after printing my QR code?",
+        question: "Can I manage more than one business?",
         answer:
-          "Yes. Your QR code points to your online business profile. You can update the information on your profile without needing to print a new QR code.",
-      },
-      {
-        question: "Can I share my business profile without a QR code?",
-        answer:
-          "Yes. Your business profile has a web address that you can share directly through messaging apps, social media, email, websites, or anywhere else you want.",
+          "Yes. Your account can be used to create and manage multiple business profiles. Each business profile has its own public page and QR code.",
       },
     ],
   },
   {
-    title: "QR Code",
+    title: "Sharing & QR Codes",
     items: [
       {
         question: "How does my QR code work?",
         answer:
-          "Your QR code opens your public business profile. Customers can scan it with their phone camera or a compatible QR scanner and access the information and actions you have added.",
+          "Your QR code opens your public business profile. Customers can scan it with a compatible phone camera or QR scanner and access the information and actions you have added.",
       },
       {
         question: "Does my QR code change when I update my profile?",
         answer:
-          "No. Your QR code points to your business profile rather than storing all of your business information inside the image. Updating your profile does not require you to create a new QR code.",
+          "No. Your QR code points to your online business profile rather than storing all of your business information inside the image. You can update the profile without needing to create a new QR code.",
       },
       {
         question: "Do customers need the QR app?",
         answer:
-          "No. Customers do not need an account or a special QR app. They can scan your QR code using a compatible phone camera or QR scanner and open your public business profile in their browser.",
+          "No. Customers do not need an account or a special QR app. They can scan your QR code using a compatible phone camera or QR scanner and open your public profile in their browser.",
       },
       {
-        question: "Can I use my QR code on my business cards or flyers?",
+        question: "Can I share my profile without a QR code?",
         answer:
-          "Yes. You can download your QR code and place it on business cards, flyers, storefronts, receipts, posters, packaging, signs, menus, promotional materials, and other customer/business facing materials.",
+          "Yes. Your profile has a web address that you can share directly through messaging apps, social media, email, websites, or anywhere else you want.",
+      },
+      {
+        question: "Where can I use my QR code?",
+        answer:
+          "You can use it wherever people interact with your business, including business cards, storefronts, menus, packaging, receipts, flyers, posters, vehicles, tables, product displays, social media, and other promotional materials.",
       },
       {
         question: "What happens if I change my phone number or website?",
         answer:
-          "Simply update the information on your business profile. Your existing QR code can continue pointing to the same profile, so you do not need to reprint it just because your business information changed.",
+          "Simply update the information on your business profile. Your existing QR code can continue pointing to the same profile, so you do not need to replace it just because your business information changed.",
       },
     ],
   },
@@ -107,12 +118,12 @@ const faqSections = [
       {
         question: "What is Business Analytics?",
         answer:
-          "Business Analytics helps you understand how people interact with your QR business profile. You can see profile views, action clicks, activity over time, and which customer actions receive the most clicks.",
+          "Business Analytics helps you understand how people interact with your public business profile. You can see profile views, action clicks, activity over time, and which customer actions receive the most clicks.",
       },
       {
         question: "What can I see in my analytics?",
         answer:
-          "Your analytics currently include total profile views, total action clicks, activity for today, this week and this month, a recent activity chart, and your most clicked customer actions.",
+          "Your current analytics include total profile views, total action clicks, activity for today, this week and this month, a recent activity chart, and your most clicked customer actions.",
       },
       {
         question: "Does a QR scan count as a profile view?",
@@ -122,77 +133,107 @@ const faqSections = [
       {
         question: "Can I see which action customers clicked?",
         answer:
-          "Yes. Action clicks are recorded by action name, allowing you to see which actions on your profile are receiving the most engagement.",
+          "Yes. Action clicks are recorded by action name, allowing you to see which actions on your profile receive the most engagement.",
       },
       {
         question: "Can I see who scanned my QR code?",
         answer:
-          "No. QR's current analytics are designed to show business level activity rather than identify individual customers. We do not currently provide personal identities for people who visit or interact with your profile.",
+          "No. QR's current analytics are designed to show business-level activity rather than identify individual customers. The current system does not provide you with the personal identity of people who visit or interact with your profile.",
       },
       {
         question: "Can I see customer locations or devices?",
         answer:
-          "Not currently. The current analytics system focuses on profile views and action clicks. More advanced analytics will be introduced in the future.",
+          "Not currently. The current analytics system focuses on profile views and action clicks.",
       },
       {
         question: "How often are analytics updated?",
         answer:
-          "Analytics are recorded when customers visit your public profile or interact with tracked actions. Your dashboard uses those recorded events to show your business activity.",
+          "Analytics are recorded when people visit your public profile or interact with tracked actions. Your dashboard uses those recorded events to show your business activity.",
       },
     ],
   },
   {
-    title: "Free Access",
+    title: "Free Early Access",
     items: [
       {
         question: "Is QR free to use?",
         answer:
-          "QR is currently available free of charge while we grow the platform and welcome early users.",
-      },
-      {
-        question: "Will QR always be free?",
-        answer:
-          "We have not finalized the long term pricing structure yet. QR is currently free for early users, and future plans may introduce additional paid features or plans. Any major changes will be communicated clearly.",
-      },
-      {
-        question: "Are business analytics currently free?",
-        answer:
-          "Yes. Business Analytics is currently available as part of the free experience while QR is in its early stage.",
-      },
-      {
-        question: "Will analytics remain free?",
-        answer:
-          "The current analytics experience is free. We will introduce more advanced analytics or additional business features as the platform develops, but the future pricing structure has not been finalized.",
+          "Yes. QR is currently available free for early users.",
       },
       {
         question: "Why is QR free right now?",
         answer:
           "We are making QR available free during the early stage so businesses can try the platform, create their digital business profiles, use their QR codes, and help us improve the product through real-world use and feedback.",
       },
+      {
+        question: "What does free early access include?",
+        answer:
+          "Early users can currently create and manage business profiles, add links and customer actions, generate and download QR codes, share their public profiles, and use the available business analytics.",
+      },
+      {
+        question: "Why are you inviting people to use QR this early?",
+        answer:
+          "QR is being developed through real-world use. Early users help us discover what works, where people struggle, what information they need, and which problems the platform should solve next.",
+      },
     ],
   },
   {
-    title: "Privacy & Public Profiles",
+    title: "Identity & Privacy",
     items: [
       {
         question: "Is my business profile public?",
         answer:
-          "Yes. Your QR business profile is designed to be shared with customers, so information and actions you add to the public profile can be accessed by anyone who has the profile link or scans your QR code.",
+          "Yes. Your public business profile is designed to be shared with customers. Information and actions you add to the public profile can be accessed by anyone who has the profile link or scans your QR code.",
       },
       {
-        question: "Do customers need to create an account to view my profile?",
+        question: "Do customers need an account to view my profile?",
         answer:
           "No. Your public business profile can be opened directly in a web browser. Customers do not need a QR account to view it.",
       },
       {
         question: "Does QR identify my customers?",
         answer:
-          "QR's business analytics are focused on aggregate activity such as profile views and action clicks. The current system does not provide you with the personal identity of individual visitors. In the future upgrades businesses will be able to see broader analytics of their profile.",
+          "QR's current business analytics focus on aggregate activity such as profile views and action clicks. The current system does not provide you with the personal identity of individual visitors.",
       },
       {
         question: "What information should I put on my public profile?",
         answer:
-          "Only add information you are comfortable making available to your customers. Your public profile is intended for business information such as contact details, business links, location, and customer actions.",
+          "Only add information you are comfortable making available publicly. Your current public profile is intended for business information such as contact details, business links, location, and customer actions.",
+      },
+      {
+        question: "Will every part of a future QR identity have to be public?",
+        answer:
+          "No. The broader identity system is being designed around controlled sharing. Different information or representations can be shared depending on the situation, rather than requiring a person or organization to expose everything they have.",
+      },
+    ],
+  },
+  {
+    title: "People, Work & Organizations",
+    items: [
+      {
+        question: "Could QR be used as a professional profile?",
+        answer:
+          "Yes. That is part of the broader direction of QR. A professional identity could bring together experience, education, skills, projects, credentials, portfolio information, and contact methods in one structured identity.",
+      },
+      {
+        question: "Could a CV become part of my QR identity?",
+        answer:
+          "Yes. The long-term concept is that a CV would be one representation of a person's professional identity rather than the identity itself. The same underlying information could support a professional profile, CV, resume, portfolio, or application-specific representation.",
+      },
+      {
+        question: "Could a company have an identity on QR too?",
+        answer:
+          "Yes. The organizational side of QR is intended to represent more than a simple business contact page. An organization can eventually have its identity, services, projects, capabilities, team, credentials, opportunities, and other relevant information connected together.",
+      },
+      {
+        question: "Could companies use QR for careers and recruitment?",
+        answer:
+          "That is part of the direction QR is being designed toward. The idea is for organizations to maintain their own organizational identity and eventually use it as a place where people can understand the organization, discover opportunities, and interact with it. Those capabilities are not part of the current business-profile MVP yet.",
+      },
+      {
+        question: "Would QR replace job platforms?",
+        answer:
+          "The goal is not to assume that every external platform needs to disappear. QR can provide an organization's own identity and interaction layer, while external platforms can still serve as places where opportunities are discovered and distributed.",
       },
     ],
   },
@@ -200,14 +241,9 @@ const faqSections = [
     title: "Using QR for Your Business",
     items: [
       {
-        question: "Where can I use my QR code?",
-        answer:
-          "You can use it anywhere customers interact with your business, including storefronts, business cards, menus, packaging, receipts, flyers, posters, vehicles, tables, product displays, and social media.",
-      },
-      {
         question: "Can a restaurant use QR?",
         answer:
-          "Yes. A restaurant could use a QR profile for actions such as calling, WhatsApp, location, Instagram, viewing a menu, or accessing other customer links.",
+          "Yes. A restaurant can use its profile for actions such as calling, WhatsApp, location, Instagram, viewing a menu, or accessing other customer links.",
       },
       {
         question: "Can service businesses use QR?",
@@ -217,12 +253,17 @@ const faqSections = [
       {
         question: "Can I use QR for my personal brand or professional services?",
         answer:
-          "Yes. QR can also be used by freelancers, consultants, creators, professionals, and personal brands who want to give people one simple destination for their important links and contact actions.",
+          "The broader platform is being designed to support professionals, freelancers, consultants, creators, and personal brands. The current account experience, however, is focused on creating business profiles.",
       },
       {
-        question: "What is the advantage of using a QR business profile instead of just a QR code?",
+        question: "What is the advantage of a QR profile instead of just a QR code?",
         answer:
-          "A static QR code usually points to one destination. QR combines the QR code with a digital business profile where you can organize multiple customer actions and update the information without replacing the QR code.",
+          "A QR code is simply an access mechanism. QR connects that access mechanism to a digital profile where the important information and actions can be organized and updated. This gives people one destination rather than requiring a separate QR code for every piece of information.",
+      },
+      {
+        question: "Can I update my profile after printing my QR code?",
+        answer:
+          "Yes. Your QR code points to your online profile, so you can update the information behind it without needing to print a new QR code.",
       },
     ],
   },
@@ -252,7 +293,7 @@ const faqSections = [
     ],
   },
   {
-    title: "Support",
+    title: "Support & Feedback",
     items: [
       {
         question: "How do I contact support?",
@@ -267,7 +308,12 @@ const faqSections = [
       {
         question: "How can I suggest a feature?",
         answer:
-          "You can send feedback through the Feedback page. Feature suggestions from early users help us understand what businesses need from QR as the platform develops.",
+          "You can send feedback through the Feedback page. Suggestions from early users help us understand what people and organizations need from QR.",
+      },
+      {
+        question: "Why does QR ask early users for feedback?",
+        answer:
+          "Because the platform is being developed through real-world use. Feedback helps us identify genuine problems and improve QR around the needs of the people actually using it.",
       },
     ],
   },
@@ -294,9 +340,10 @@ export default function FAQPage() {
             Frequently asked questions
           </h1>
 
-          <p className="mt-3 max-w-xl text-sm leading-6 text-gray-600">
-            Find answers about business profiles, QR codes, analytics,
-            free access, accounts, and using QR for your business.
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
+            Learn how QR works today, what you can do with a digital business
+            profile, how QR handles sharing and analytics, and the broader
+            identity direction the platform is being built toward.
           </p>
         </div>
 
@@ -307,9 +354,7 @@ export default function FAQPage() {
                 {section.title}
               </h2>
 
-              <FAQAccordion
-                items={section.items}
-              />
+              <FAQAccordion items={section.items} />
             </section>
           ))}
         </div>

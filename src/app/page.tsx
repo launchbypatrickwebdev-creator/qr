@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
+  BriefcaseBusiness,
   Check,
   Link2,
   MapPin,
@@ -9,33 +10,35 @@ import {
   Phone,
   QrCode,
   Share2,
+  Sparkles,
   Star,
+  Users,
 } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
 
-const features = [
+const capabilities = [
   {
     icon: Link2,
-    title: "Everything in one place",
+    title: "One place for your identity",
     description:
-      "Bring your phone, WhatsApp, website, social links, location, and other customer actions into one profile.",
-  },
-  {
-    icon: QrCode,
-    title: "One QR code",
-    description:
-      "Give customers one simple way to open your business profile from signs, cards, packaging, or your storefront.",
+      "Bring the information people need to know about you or your organization into one clear digital profile.",
   },
   {
     icon: Share2,
-    title: "Easy to share",
+    title: "Share it anywhere",
     description:
-      "Share your profile anywhere with a simple link or let customers scan your QR code.",
+      "Give people one simple link to your profile, or let them reach it through a QR code.",
+  },
+  {
+    icon: QrCode,
+    title: "QR as your doorway",
+    description:
+      "Your QR code gives people a simple way to open your digital profile wherever you choose to place it.",
   },
 ];
 
-const actions = [
+const businessActions = [
   {
     icon: Phone,
     label: "Call",
@@ -52,6 +55,15 @@ const actions = [
     icon: MapPin,
     label: "Location",
   },
+];
+
+const identityExamples = [
+  "Professional profile",
+  "Business profile",
+  "Experience",
+  "Services",
+  "Portfolio",
+  "Contact",
 ];
 
 export default async function HomePage() {
@@ -81,10 +93,17 @@ export default async function HomePage() {
 
           <nav className="hidden items-center gap-7 sm:flex">
             <Link
-              href="#features"
+              href="#why-qr"
               className="text-sm font-medium text-gray-600 transition hover:text-gray-950"
             >
-              Features
+              Why QR
+            </Link>
+
+            <Link
+              href="#for-who"
+              className="text-sm font-medium text-gray-600 transition hover:text-gray-950"
+            >
+              For people & organizations
             </Link>
 
             <Link
@@ -113,25 +132,42 @@ export default async function HomePage() {
         </div>
       </header>
 
+      {/* Early access banner */}
+      <div className="border-b border-gray-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-5 py-3 text-center text-xs font-medium text-gray-600 sm:text-sm">
+          <Sparkles className="h-4 w-4 shrink-0 text-gray-950" />
+          <span>
+            QR is free for early users. Build your profile, share it, and help
+            us improve the platform through real-world use.
+          </span>
+        </div>
+      </div>
+
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-7xl gap-14 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8 lg:py-28">
+        <div className="mx-auto grid max-w-7xl gap-14 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:px-8 lg:py-28">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-600 shadow-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-gray-950" />
-              Digital business profiles
+              Digital identity, made shareable
             </div>
 
-            <h1 className="mt-7 text-5xl font-bold tracking-[-0.04em] text-gray-950 sm:text-6xl lg:text-7xl">
-              Your business.
+            <h1 className="mt-7 text-5xl font-bold tracking-[-0.05em] text-gray-950 sm:text-6xl lg:text-7xl">
+              Your identity.
               <br />
-              One simple link.
+              One place to represent it.
             </h1>
 
             <p className="mt-7 max-w-xl text-base leading-7 text-gray-600 sm:text-lg sm:leading-8">
-              Create a digital business profile where customers can find your
-              contact details, website, social links, location, and more.
-              Share it with one link or one QR code.
+              QR gives people and organizations a simple digital place to
+              represent who they are, what they do, and how others can connect
+              with them.
+            </p>
+
+            <p className="mt-4 max-w-xl text-sm leading-6 text-gray-500">
+              Today, you can create a digital business profile and share it
+              with a link or QR code. QR is growing toward a broader identity
+              platform for people, businesses, and organizations.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -154,17 +190,17 @@ export default async function HomePage() {
             <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-500">
               <span className="inline-flex items-center gap-2">
                 <Check className="h-4 w-4 text-gray-900" />
+                Free for early users
+              </span>
+
+              <span className="inline-flex items-center gap-2">
+                <Check className="h-4 w-4 text-gray-900" />
                 Simple to create
               </span>
 
               <span className="inline-flex items-center gap-2">
                 <Check className="h-4 w-4 text-gray-900" />
                 Easy to share
-              </span>
-
-              <span className="inline-flex items-center gap-2">
-                <Check className="h-4 w-4 text-gray-900" />
-                Free to use
               </span>
             </div>
           </div>
@@ -174,8 +210,8 @@ export default async function HomePage() {
             <div className="relative overflow-hidden rounded-[2rem] border border-gray-200 bg-white p-3 shadow-2xl shadow-gray-300/30">
               <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem]">
                 <Image
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=85"
-                  alt="Modern retail business interior"
+                  src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85"
+                  alt="Modern professional workspace"
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -184,41 +220,33 @@ export default async function HomePage() {
 
                 <div className="absolute inset-0 bg-black/10" />
 
-                {/* Floating profile card */}
-                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/70 bg-white/95 p-4 shadow-xl backdrop-blur sm:bottom-7 sm:left-7 sm:right-auto sm:w-[290px]">
+                {/* Identity card */}
+                <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/70 bg-white/95 p-5 shadow-xl backdrop-blur sm:bottom-7 sm:left-7 sm:right-auto sm:w-[310px]">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-950 text-sm font-bold text-white">
-                      YB
+                      QR
                     </div>
 
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-gray-950">
-                        Your Business
+                      <p className="text-sm font-bold text-gray-950">
+                        Your identity
                       </p>
 
                       <p className="mt-0.5 text-xs text-gray-500">
-                        Digital business profile
+                        One place to represent it.
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-4 gap-2">
-                    {actions.map((action) => {
-                      const Icon = action.icon;
-
-                      return (
-                        <div
-                          key={action.label}
-                          className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-2 py-2.5"
-                        >
-                          <Icon className="h-4 w-4 text-gray-800" />
-
-                          <span className="text-[10px] font-medium text-gray-500">
-                            {action.label}
-                          </span>
-                        </div>
-                      );
-                    })}
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {identityExamples.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-[10px] font-medium text-gray-600"
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -285,69 +313,153 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Image strip */}
-      <section className="border-y border-gray-200 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-4 px-5 py-5 sm:grid-cols-3 sm:px-6 lg:px-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl sm:aspect-[4/3]">
-            <Image
-              src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80"
-              alt="Business team working together"
-              fill
-              sizes="(max-width: 640px) 100vw, 33vw"
-              className="object-cover"
-            />
+      {/* For whom */}
+      <section
+        id="for-who"
+        className="border-y border-gray-200 bg-white"
+      >
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-24 lg:px-8">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+              Built around identity
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+              The same idea works for people and organizations.
+            </h2>
+
+            <p className="mt-4 text-base leading-7 text-gray-600">
+              What people need to communicate about themselves is different
+              from what a company or organization needs to communicate. QR is
+              being built to represent both.
+            </p>
           </div>
 
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl sm:aspect-[4/3]">
-            <Image
-              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80"
-              alt="Customer shopping at a business"
-              fill
-              sizes="(max-width: 640px) 100vw, 33vw"
-              className="object-cover"
-            />
-          </div>
+          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+            {/* Individual */}
+            <article className="rounded-[1.75rem] border border-gray-200 bg-[#F7F7F5] p-7 sm:p-8">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-950 text-white">
+                <BriefcaseBusiness className="h-5 w-5" />
+              </div>
 
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl sm:aspect-[4/3]">
-            <Image
-              src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80"
-              alt="Modern business workspace"
-              fill
-              sizes="(max-width: 640px) 100vw, 33vw"
-              className="object-cover"
-            />
+              <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+                Individuals
+              </p>
+
+              <h3 className="mt-2 text-2xl font-bold tracking-tight text-gray-950">
+                Represent who you are.
+              </h3>
+
+              <p className="mt-3 max-w-lg text-sm leading-6 text-gray-600">
+                Your professional identity can contain the information that
+                helps people understand your experience, skills, work,
+                portfolio, and how to connect with you.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {[
+                  "Professional identity",
+                  "Experience",
+                  "Skills",
+                  "Portfolio",
+                  "CV",
+                  "Contact",
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-600"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-7 border-t border-gray-200 pt-5">
+                <p className="text-xs font-medium text-gray-500">
+                  Professional identity features are part of the direction
+                  QR is being built toward.
+                </p>
+              </div>
+            </article>
+
+            {/* Organization */}
+            <article className="rounded-[1.75rem] border border-gray-200 bg-gray-950 p-7 text-white sm:p-8">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-gray-950">
+                <Users className="h-5 w-5" />
+              </div>
+
+              <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
+                Organizations
+              </p>
+
+              <h3 className="mt-2 text-2xl font-bold tracking-tight">
+                Represent what you do.
+              </h3>
+
+              <p className="mt-3 max-w-lg text-sm leading-6 text-gray-400">
+                A business or organization can bring its identity, services,
+                projects, people, contact methods, and other important
+                information into one place.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {[
+                  "Business profile",
+                  "Services",
+                  "Projects",
+                  "Team",
+                  "Capabilities",
+                  "Contact",
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-xs font-medium text-gray-300"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-7 border-t border-gray-800 pt-5">
+                <p className="text-xs font-medium text-gray-400">
+                  Business profiles are available today. More organizational
+                  capabilities will be built around them.
+                </p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* Why QR */}
       <section
-        id="features"
+        id="why-qr"
         className="border-b border-gray-200 bg-[#F7F7F5]"
       >
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-              Everything connected
+              Why QR
             </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-              Give your customers one place to start.
+              Create once. Represent yourself clearly. Share anywhere.
             </h2>
 
             <p className="mt-4 text-base leading-7 text-gray-600">
-              Instead of sending customers in different directions, give them
-              a single profile that connects them to your business.
+              Instead of repeatedly rebuilding the same information for every
+              place you need to present yourself or your organization, QR is
+              designed around a living digital identity.
             </p>
           </div>
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {features.map((feature) => {
-              const Icon = feature.icon;
+            {capabilities.map((capability) => {
+              const Icon = capability.icon;
 
               return (
                 <article
-                  key={feature.title}
+                  key={capability.title}
                   className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-950 text-white">
@@ -355,11 +467,11 @@ export default async function HomePage() {
                   </div>
 
                   <h3 className="mt-6 text-lg font-semibold text-gray-950">
-                    {feature.title}
+                    {capability.title}
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-gray-600">
-                    {feature.description}
+                    {capability.description}
                   </p>
                 </article>
               );
@@ -378,7 +490,7 @@ export default async function HomePage() {
             <div className="relative aspect-[4/5]">
               <Image
                 src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1100&q=85"
-                alt="Customer using a smartphone"
+                alt="Person using a smartphone"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover"
@@ -387,11 +499,11 @@ export default async function HomePage() {
 
             <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/70 bg-white/95 p-5 shadow-xl backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
-                One profile
+                One identity
               </p>
 
               <p className="mt-1 text-lg font-bold text-gray-950">
-                Everything customers need.
+                Many ways to connect.
               </p>
             </div>
           </div>
@@ -402,9 +514,9 @@ export default async function HomePage() {
             </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-              Set it up once.
+              Put the important information together.
               <br />
-              Share it everywhere.
+              Then share it.
             </h2>
 
             <div className="mt-10 space-y-8">
@@ -415,12 +527,13 @@ export default async function HomePage() {
 
                 <div>
                   <h3 className="font-semibold text-gray-950">
-                    Create your business profile
+                    Create your profile
                   </h3>
 
                   <p className="mt-1.5 text-sm leading-6 text-gray-600">
-                    Add your business name, description, contact details,
-                    branding, and other information.
+                    Today, businesses can create a digital profile with their
+                    name, description, branding, contact information, links,
+                    location, and customer actions.
                   </p>
                 </div>
               </div>
@@ -432,12 +545,12 @@ export default async function HomePage() {
 
                 <div>
                   <h3 className="font-semibold text-gray-950">
-                    Add your customer actions
+                    Connect what matters
                   </h3>
 
                   <p className="mt-1.5 text-sm leading-6 text-gray-600">
-                    Give customers direct ways to call, message, visit your
-                    website, find your location, and more.
+                    Bring the ways people can interact with you or your
+                    organization into one clear destination.
                   </p>
                 </div>
               </div>
@@ -449,12 +562,12 @@ export default async function HomePage() {
 
                 <div>
                   <h3 className="font-semibold text-gray-950">
-                    Share your profile
+                    Share your identity
                   </h3>
 
                   <p className="mt-1.5 text-sm leading-6 text-gray-600">
-                    Use your profile link or download your QR code and put it
-                    wherever customers can see it.
+                    Use your profile link or QR code wherever people need a
+                    simple way to find and connect with you.
                   </p>
                 </div>
               </div>
@@ -463,22 +576,40 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Product mockup */}
+      {/* Current product */}
       <section className="overflow-hidden bg-gray-950 text-white">
         <div className="mx-auto grid max-w-7xl gap-14 px-5 py-20 sm:px-6 sm:py-24 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
-              Your digital front door
+              Available today
             </p>
 
             <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              A profile that represents your business.
+              A digital business profile people can actually use.
             </h2>
 
             <p className="mt-5 max-w-lg text-base leading-7 text-gray-400">
-              Your customers do not need to understand the technology behind
-              it. They simply scan, tap, and find what they need.
+              Customers can open your profile, find your information, and
+              take action without needing an account or a special QR app.
             </p>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {[
+                "Phone",
+                "WhatsApp",
+                "Website",
+                "Location",
+                "Social links",
+                "Custom links",
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-xs font-medium text-gray-300"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
 
             <Link
               href="/signup"
@@ -504,9 +635,7 @@ export default async function HomePage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold">
-                      Your Business
-                    </h3>
+                    <h3 className="text-lg font-bold">Your Business</h3>
 
                     <p className="mt-1 text-sm text-gray-500">
                       Everything in one profile.
@@ -515,36 +644,62 @@ export default async function HomePage() {
                 </div>
 
                 <div className="mt-7 space-y-3">
-                  {[
-                    "Call your business",
-                    "Message on WhatsApp",
-                    "Visit website",
-                    "Get directions",
-                  ].map((item, index) => (
-                    <div
-                      key={item}
-                      className="flex min-h-14 items-center gap-3 rounded-xl border border-gray-200 bg-white px-4"
-                    >
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-950 text-white">
-                        {index === 0 && <Phone className="h-4 w-4" />}
-                        {index === 1 && (
-                          <MessageCircle className="h-4 w-4" />
-                        )}
-                        {index === 2 && <Link2 className="h-4 w-4" />}
-                        {index === 3 && <MapPin className="h-4 w-4" />}
+                  {businessActions.map((action) => {
+                    const Icon = action.icon;
+
+                    return (
+                      <div
+                        key={action.label}
+                        className="flex min-h-14 items-center gap-3 rounded-xl border border-gray-200 bg-white px-4"
+                      >
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-950 text-white">
+                          <Icon className="h-4 w-4" />
+                        </div>
+
+                        <span className="text-sm font-medium">
+                          {action.label}
+                        </span>
+
+                        <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
                       </div>
-
-                      <span className="text-sm font-medium">
-                        {item}
-                      </span>
-
-                      <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Free early access */}
+      <section className="border-b border-gray-200 bg-[#F7F7F5]">
+        <div className="mx-auto max-w-4xl px-5 py-20 text-center sm:px-6 sm:py-24">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-950 text-white">
+            <Sparkles className="h-6 w-6" />
+          </div>
+
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+            Early access
+          </p>
+
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+            QR is free for early users.
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-600">
+            We are making QR available free during the early stage so people
+            and organizations can use the platform in the real world, build
+            their digital presence, and help us improve it through actual use
+            and feedback.
+          </p>
+
+          <Link
+            href="/signup"
+            className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-xl bg-gray-950 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800"
+          >
+            Get started
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 
@@ -561,7 +716,8 @@ export default async function HomePage() {
             </h2>
 
             <p className="mt-4 text-base leading-7 text-gray-600">
-              See what people using QR have shared about their experience.
+              QR is being shaped through real-world use and feedback from the
+              people using it.
             </p>
           </div>
 
@@ -616,7 +772,7 @@ export default async function HomePage() {
 
               <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-gray-600">
                 Have you used QR? Share your experience and help us make it
-                better for businesses everywhere.
+                better.
               </p>
             </div>
           )}
@@ -641,12 +797,13 @@ export default async function HomePage() {
           </div>
 
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-            Put your business in one place.
+            Start representing your identity.
           </h2>
 
           <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-gray-600">
-            Create your digital business profile, connect your customer
-            actions, and share it with one simple link or QR code.
+            Create your digital business profile today, connect the ways
+            people can reach you, and share it with one simple link or QR
+            code.
           </p>
 
           <Link
@@ -672,8 +829,8 @@ export default async function HomePage() {
               </Link>
 
               <p className="mt-3 max-w-xs text-sm leading-6 text-gray-500">
-                Simple digital business profiles that make it easier for
-                customers to connect with you.
+                A digital identity platform for people and organizations.
+                Today, businesses can create and share digital profiles.
               </p>
             </div>
 
@@ -684,10 +841,17 @@ export default async function HomePage() {
 
               <div className="mt-4 space-y-3">
                 <Link
-                  href="#features"
+                  href="#why-qr"
                   className="block text-sm text-gray-500 transition hover:text-gray-950"
                 >
-                  Features
+                  Why QR
+                </Link>
+
+                <Link
+                  href="#for-who"
+                  className="block text-sm text-gray-500 transition hover:text-gray-950"
+                >
+                  For people & organizations
                 </Link>
 
                 <Link
@@ -761,7 +925,7 @@ export default async function HomePage() {
           <div className="mt-10 flex flex-col gap-3 border-t border-gray-200 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} QR. All rights reserved.</p>
 
-            <p>Digital business profiles made simple.</p>
+            <p>Digital identity made shareable.</p>
           </div>
         </div>
       </footer>
